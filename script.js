@@ -85,5 +85,9 @@ const createUserName = function (accs) {
   );
 };
 
+const deposits = account1.movements.filter(mov => mov > 0);
+
+const withdrawals = account1.movements.filter(mov => mov < 0);
+
 displayMovements(account1.movements);
 createUserName(accounts);
