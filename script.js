@@ -90,11 +90,24 @@ const calcPrintBalance = function (movements) {
   labelBalance.textContent = `${balance}€`;
 };
 
-const deposits = account1.movements.filter(mov => mov > 0);
+const calcDisplaySummary = function (movements) {
+  const deposits = movements.filter(mov => mov > 0);
+  const withdrawals = movements.filter(mov => mov < 0);
 
-const withdrawals = account1.movements.filter(mov => mov < 0);
+  const income = deposits.reduce((sum, cur) => sum + cur, 0);
+  labelSumIn.textContent = `${income}€`;
+
+  const outcome = withdrawals.reduce((sum, cur) => sum - cur, 0);
+  labelSumOut.textContent = `${outcome}€`;
+
+  const interest = deposits
+    .map(deposit => deposit * 0.012)
+    .filter(cur => cur > 1)
+    .reduce((sum, cur) => sum + cur, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
 
 displayMovements(account1.movements);
 createUserName(accounts);
-
 calcPrintBalance(account1.movements);
+calcDisplaySummary(account1.movements);
