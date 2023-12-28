@@ -85,9 +85,16 @@ const createUserName = function (accs) {
   );
 };
 
+const calcPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, cur) => acc + cur, 0);
+  labelBalance.textContent = `${balance}€`;
+};
+
 const deposits = account1.movements.filter(mov => mov > 0);
 
 const withdrawals = account1.movements.filter(mov => mov < 0);
 
 displayMovements(account1.movements);
 createUserName(accounts);
+
+calcPrintBalance(account1.movements);
