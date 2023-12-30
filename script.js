@@ -58,9 +58,13 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const displayMovements = function (movements, sorted = false) {
+  // Empty the container
   containerMovements.innerHTML = '';
 
+  // Sort movements if needed
   const movs = !sorted ? movements : [...movements].sort((a, b) => a - b);
+
+  // Display movements
   movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
@@ -87,20 +91,27 @@ const createUserName = function (accs) {
 };
 
 const calcDisplayBalance = function (acc) {
+  // Calculate the balance
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
+
+  // Display the balance
   labelBalance.textContent = `${acc.balance}€`;
 };
 
 const calcDisplaySummary = function (acc) {
+  // Create arrays of deposits and withdrawals
   const deposits = acc.movements.filter(mov => mov > 0);
   const withdrawals = acc.movements.filter(mov => mov < 0);
 
+  // Calculate and display the income
   const income = deposits.reduce((sum, cur) => sum + cur, 0);
   labelSumIn.textContent = `${income}€`;
 
+  // Calculate and display the outcome
   const outcome = withdrawals.reduce((sum, cur) => sum - cur, 0);
   labelSumOut.textContent = `${outcome}€`;
 
+  // Calculate and display the interest
   const interest = deposits
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(cur => cur > 1)
@@ -152,13 +163,16 @@ btnTransfer.addEventListener('click', e => {
   // Prevent form from submitting
   e.preventDefault();
 
+  // Extract input data
   const amount = Number(inputTransferAmount.value);
   const targetAccount = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
 
+  // Empty the input fields
   inputTransferTo.value = inputTransferAmount.value = '';
 
+  // Transfer money if the conditions are passed
   if (
     amount > 0 &&
     targetAccount &&
@@ -174,6 +188,7 @@ btnTransfer.addEventListener('click', e => {
 });
 
 btnLoan.addEventListener('click', e => {
+  // Prevent form from submitting
   e.preventDefault();
 
   const amount = Number(inputLoanAmount.value);
@@ -186,10 +201,12 @@ btnLoan.addEventListener('click', e => {
     updateUI(currentAccount);
   }
 
+  // Empty the input field
   inputLoanAmount.value = '';
 });
 
 btnClose.addEventListener('click', e => {
+  // Prevent form from submitting
   e.preventDefault();
 
   if (
@@ -206,6 +223,7 @@ btnClose.addEventListener('click', e => {
     // Hide UI
     containerApp.style.opacity = 0;
 
+    // Empty the input fields
     inputTransferTo.value = inputTransferAmount.value = '';
   }
 });
@@ -213,8 +231,12 @@ btnClose.addEventListener('click', e => {
 let isSorted = false;
 
 btnSort.addEventListener('click', e => {
+  // Prevent form from submitting
   e.preventDefault();
+
+  // Display the movements
   displayMovements(currentAccount.movements, !isSorted);
 
+  // Toggle the isSorted variable
   isSorted = !isSorted;
 });
