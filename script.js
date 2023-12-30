@@ -84,7 +84,7 @@ const displayMovements = function (movements, sorted = false) {
           <div class="movements__type movements__type--${type}">
             ${i + 1} ${type}
           </div>
-          <div class="movements__value">${mov}€</div>
+          <div class="movements__value">${mov.toFixed(2)}€</div>
         </div>
         `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -107,7 +107,7 @@ const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
 
   // Display the balance
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
@@ -117,18 +117,18 @@ const calcDisplaySummary = function (acc) {
 
   // Calculate and display the income
   const income = deposits.reduce((sum, cur) => sum + cur, 0);
-  labelSumIn.textContent = `${income}€`;
+  labelSumIn.textContent = `${income.toFixed(2)}€`;
 
   // Calculate and display the outcome
   const outcome = withdrawals.reduce((sum, cur) => sum - cur, 0);
-  labelSumOut.textContent = `${outcome}€`;
+  labelSumOut.textContent = `${outcome.toFixed(2)}€`;
 
   // Calculate and display the interest
   const interest = deposits
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(cur => cur > 1)
     .reduce((sum, cur) => sum + cur, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const updateUI = function (acc) {
