@@ -191,7 +191,7 @@ btnLoan.addEventListener('click', e => {
   // Prevent form from submitting
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
     // Add movement
