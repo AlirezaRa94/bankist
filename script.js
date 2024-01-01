@@ -147,6 +147,11 @@ createUserName(accounts);
 // Event Handlers
 let currentAccount;
 
+// FAKE always logged in
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+
 btnLogin.addEventListener('click', e => {
   // Prevent form from submitting
   e.preventDefault();
