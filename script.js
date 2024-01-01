@@ -69,21 +69,26 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements, sorted = false) {
+const displayMovements = function (acc, sorted = false) {
   // Empty the container
   containerMovements.innerHTML = '';
 
   // Sort movements if needed
-  const movs = !sorted ? movements : [...movements].sort((a, b) => a - b);
+  const movs = !sorted
+    ? acc.movements
+    : [...acc.movements].sort((a, b) => a - b);
 
   // Display movements
   movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
+    const displayDate = new Date(acc.movementsDates[i]).toDateString();
+
     const html = `
         <div class="movements__row">
           <div class="movements__type movements__type--${type}">
             ${i + 1} ${type}
           </div>
+          <div class="movements__date">${displayDate}</div>
           <div class="movements__value">${mov.toFixed(2)}€</div>
         </div>
         `;
@@ -133,7 +138,7 @@ const calcDisplaySummary = function (acc) {
 
 const updateUI = function (acc) {
   // Display movements
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   // Display balance
   calcDisplayBalance(acc);
@@ -206,8 +211,11 @@ btnTransfer.addEventListener('click', e => {
     amount <= currentAccount.balance &&
     targetAccount.username !== currentAccount.username
   ) {
+    const curDate = new Date().toISOString();
     targetAccount.movements.push(amount);
+    targetAccount.movementsDates.push(curDate);
     currentAccount.movements.push(-amount);
+    currentAccount.movementsDates.push(curDate);
 
     // Update UI
     updateUI(currentAccount);
@@ -223,6 +231,8 @@ btnLoan.addEventListener('click', e => {
   if (amount > 0 && currentAccount.movements.some(mov => mov >= 0.1 * amount)) {
     // Add movement
     currentAccount.movements.push(amount);
+
+    currentAccount.movementsDates.push(new Date().toISOString());
 
     // Update UI
     updateUI(currentAccount);
@@ -262,7 +272,7 @@ btnSort.addEventListener('click', e => {
   e.preventDefault();
 
   // Display the movements
-  displayMovements(currentAccount.movements, !isSorted);
+  displayMovements(currentAccount, !isSorted);
 
   // Toggle the isSorted variable
   isSorted = !isSorted;
