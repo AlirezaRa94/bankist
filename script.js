@@ -83,6 +83,13 @@ const formatMovementDate = function (date, locale) {
   return new Intl.DateTimeFormat(locale).format(targetDate);
 };
 
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
 const displayMovements = function (acc, sorted = false) {
   // Empty the container
   containerMovements.innerHTML = '';
@@ -105,7 +112,11 @@ const displayMovements = function (acc, sorted = false) {
             acc.movementsDates[i],
             acc.locale
           )}</div>
-          <div class="movements__value">${mov.toFixed(2)}€</div>
+          <div class="movements__value">${formatCur(
+            mov,
+            acc.locale,
+            acc.currency
+          )}</div>
         </div>
         `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -128,7 +139,7 @@ const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, cur) => acc + cur, 0);
 
   // Display the balance
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = formatCur(acc.balance, acc.locale, acc.currency);
 };
 
 const calcDisplaySummary = function (acc) {
@@ -138,18 +149,18 @@ const calcDisplaySummary = function (acc) {
 
   // Calculate and display the income
   const income = deposits.reduce((sum, cur) => sum + cur, 0);
-  labelSumIn.textContent = `${income.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(income, acc.locale, acc.currency);
 
   // Calculate and display the outcome
   const outcome = withdrawals.reduce((sum, cur) => sum - cur, 0);
-  labelSumOut.textContent = `${outcome.toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(outcome, acc.locale, acc.currency);
 
   // Calculate and display the interest
   const interest = deposits
     .map(deposit => (deposit * acc.interestRate) / 100)
     .filter(cur => cur > 1)
     .reduce((sum, cur) => sum + cur, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 
 const updateUI = function (acc) {
