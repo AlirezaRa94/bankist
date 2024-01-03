@@ -69,7 +69,7 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs((date2 - date1) / (24 * 60 * 60 * 1000)));
 
@@ -80,7 +80,7 @@ const formatMovementDate = function (date) {
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
 
-  return targetDate.toDateString();
+  return new Intl.DateTimeFormat(locale).format(targetDate);
 };
 
 const displayMovements = function (acc, sorted = false) {
@@ -102,7 +102,8 @@ const displayMovements = function (acc, sorted = false) {
             ${i + 1} ${type}
           </div>
           <div class="movements__date">${formatMovementDate(
-            acc.movementsDates[i]
+            acc.movementsDates[i],
+            acc.locale
           )}</div>
           <div class="movements__value">${mov.toFixed(2)}€</div>
         </div>
