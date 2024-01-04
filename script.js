@@ -178,6 +178,7 @@ const startLogOutTimer = function () {
   const tick = function () {
     const min = String(Math.trunc(time / 60)).padStart(2, 0);
     const sec = String(time % 60).padStart(2, 0);
+
     // In each call, print the remaining time to UI
     labelTimer.textContent = `${min}:${sec}`;
 
@@ -192,6 +193,7 @@ const startLogOutTimer = function () {
     // Decrease 1s
     time--;
   };
+
   // Set time to 10 minutes
   let time = 10 * 60;
 
@@ -206,25 +208,6 @@ createUserName(accounts);
 
 // Event Handlers
 let currentAccount, timer;
-
-// FAKE always logged in
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
-
-// Display current date
-const locale = navigator.language;
-const now = new Date();
-
-const options = {
-  day: 'numeric',
-  month: 'long',
-  year: 'numeric',
-  weekday: 'long',
-  hour: '2-digit',
-  minute: '2-digit',
-};
-labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now);
 
 btnLogin.addEventListener('click', e => {
   // Prevent form from submitting
